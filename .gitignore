@@ -1,0 +1,6 @@
+*.pyc
+*.DS_Store
+env/
+*.log
+provisioning/roles
+**/.vagrant

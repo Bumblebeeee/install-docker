@@ -1,2 +1,16 @@
 ---
-# defaults file for install-docker
+# defaults file for install_docker
+pre_packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
+
+packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+
+docker_volume_netshare_type: nfs
+docker_volume_netshare_params: ""

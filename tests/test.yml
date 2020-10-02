@@ -1,5 +1,7 @@
----
-- hosts: localhost
-  remote_user: root
+- hosts: all
+  become: yes
+  tasks:
+  - debug:
+      msg: "It works!" 
   roles:
-    - install-docker
+  - install_docker
