@@ -1,2 +1,4 @@
 ---
 # vars file for install-docker
+docker_user: 
+  - vagrant

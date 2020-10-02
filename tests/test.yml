@@ -4,4 +4,4 @@
   - debug:
       msg: "It works!" 
   roles:
-  - install_docker
+  - install-docker
