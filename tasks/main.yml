@@ -36,10 +36,12 @@
   get_url:
     url: https://github.com/ContainX/docker-volume-netshare/releases/download/v0.36/docker-volume-netshare_0.36_amd64.deb
     dest: /tmp/docker-volume-netshare_0.36_amd64.deb
+  when: include_docker_volume_netshare
 
 - name: Install docker-volume-netshare Plugin
   apt:
     deb: /tmp/docker-volume-netshare_0.36_amd64.deb
+  when: include_docker_volume_netshare
 
 - name: Copying over docker-volume-netshare.service using docker-volume-netshare.service.j2 template
   template:
@@ -48,11 +50,13 @@
     owner: root
     group: root
     mode: 0644
+  when: include_docker_volume_netshare
 
 - name: Starting service
   systemd:
     daemon_reload: yes
     name: docker-volume-netshare
     state: restarted
+  when: include_docker_volume_netshare
 
 #docker plugin install --grant-all-permissions vieux/sshfs

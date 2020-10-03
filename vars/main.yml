@@ -2,3 +2,4 @@
 # vars file for install-docker
 docker_user: 
   - vagrant
+include_docker_volume_netshare: false

@@ -1,7 +1,7 @@
 Ansible Role: install-docker
 =========
 
-Installing latest Docker CE on Ubuntu. 
+Installing the latest Docker CE on Ubuntu with the option to add docker shared volume plugin
 
 Requirements
 ------------
@@ -33,6 +33,8 @@ docker_volume_netshare_params: ""
 # vars file for install-docker
 docker_user: 
   - vagrant
+# Choose if docker-volume-netshare is also included
+include_docker_volume_netshare: false
 
 ```
 
