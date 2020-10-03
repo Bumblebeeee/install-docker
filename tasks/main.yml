@@ -1,2 +1,62 @@
 ---
-# tasks file for install-docker
+# tasks file for install_docker
+- name: Install packages to allow apt to use a repository over HTTPS
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  apt:
+    name: "{{ pre_packages }}"
+    state: present
+    update_cache: yes
+
+- name: Add Docker's official GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Set up the stable repository
+  apt_repository:
+#    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_lsb.codename}} stable"
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+    state: present
+
+- name: Install the latest version of Docker CE and containerd
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+
+- name: Grant Non-Root User Permission
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: docker
+    append: yes
+  loop: "{{ docker_user }}"
+
+- name: Download docker-volume-netshare Plugin
+  get_url:
+    url: https://github.com/ContainX/docker-volume-netshare/releases/download/v0.36/docker-volume-netshare_0.36_amd64.deb
+    dest: /tmp/docker-volume-netshare_0.36_amd64.deb
+  when: include_docker_volume_netshare
+
+- name: Install docker-volume-netshare Plugin
+  apt:
+    deb: /tmp/docker-volume-netshare_0.36_amd64.deb
+  when: include_docker_volume_netshare
+
+- name: Copying over docker-volume-netshare.service using docker-volume-netshare.service.j2 template
+  template:
+    src: docker-volume-netshare.service.j2
+    dest: "/lib/systemd/system/docker-volume-netshare.service"
+    owner: root
+    group: root
+    mode: 0644
+  when: include_docker_volume_netshare
+
+- name: Starting service
+  systemd:
+    daemon_reload: yes
+    name: docker-volume-netshare
+    state: restarted
+  when: include_docker_volume_netshare
+
+#docker plugin install --grant-all-permissions vieux/sshfs
